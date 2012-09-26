@@ -266,13 +266,16 @@ def script_GetOpName(opcode):
   except KeyError:
     return "InvalidOp_"+str(opcode)
 
-def decode_script(bytes):
+def decode_script(bytes, shortHex=True):
   result = ''
   for (opcode, vch) in script_GetOp(bytes):
     if len(result) > 0: result += " "
     if opcode <= opcodes.OP_PUSHDATA4:
       result += "%d:"%(opcode,)
-      result += short_hex(vch)
+      if shortHex == True:
+         result += short_hex(vch)
+      else:
+         result += vch.encode('hex')
     else:
       result += script_GetOpName(opcode)
   return result
